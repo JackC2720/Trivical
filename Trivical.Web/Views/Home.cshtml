@@ -1,7 +1,9 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
 @using ContentModels = Trivical.Core.Models;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+
 @{
 	Layout = "Master.cshtml";
 }
-<h1>@Model.Title</h1>
+
+@(await Component.InvokeAsync("Questions"))

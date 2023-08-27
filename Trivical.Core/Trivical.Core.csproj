@@ -13,8 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\ApiControllers\" />
-    <Folder Include="Controllers\RenderControllers\" />
     <Folder Include="Models\Generated\" />
   </ItemGroup>
 
