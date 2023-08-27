@@ -8,6 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="Umbraco.Cms.Core" Version="12.1.1" />
+    <PackageReference Include="Umbraco.Cms.Infrastructure" Version="12.1.1" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="12.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\ApiControllers\" />
+    <Folder Include="Controllers\RenderControllers\" />
+    <Folder Include="Models\Generated\" />
   </ItemGroup>
 
 </Project>
