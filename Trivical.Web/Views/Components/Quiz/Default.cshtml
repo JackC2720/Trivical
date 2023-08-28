@@ -1,0 +1,21 @@
+﻿@using Trivical.Core.Controllers;
+@using Trivical.Core.Models;
+@model List<Question>
+
+<h1>Quiz</h1>
+<form method="post" action="@Url.Action("SubmitAnswers")">
+    @foreach(var question in Model)
+    {
+        <h3>@question.question.text</h3>
+        @foreach(var answer in question.incorrectAnswers)
+        {
+            <label>
+                <input type="radio" value="@answer">
+                @answer
+            </label>
+
+            <br />
+        }
+    }
+    <button type="submit">Submit</button>
+</form>
