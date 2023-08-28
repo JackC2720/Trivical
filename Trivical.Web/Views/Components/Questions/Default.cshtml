@@ -1,14 +1,15 @@
-﻿@using Trivical.Core.Models.ViewModels;
+﻿@using System.Web;
+@using Trivical.Core.Models.ViewModels;
 @model ViewReturn
 
 <div>
     @foreach (var question in Model.questions)
     {
-        <h3>@question.question</h3>
+        <h3>@HttpUtility.HtmlDecode(question.question)</h3>
         <ol>
         @foreach(var answer in question.answers)
         {
-            <li>@answer.answer | @answer.correct</li>
+            <li>@HttpUtility.HtmlDecode(answer.answer) | @answer.correct</li>
         }
         </ol>
     }

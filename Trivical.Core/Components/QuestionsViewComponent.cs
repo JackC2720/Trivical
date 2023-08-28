@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using J2N.Collections.Generic.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Trivical.Core.Models.ViewModels;
 
 
 namespace Trivical.Core.Components
 {
-	public class QuestionsViewComponent : ViewComponent
+    public class QuestionsViewComponent : ViewComponent
 	{
-		private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
 
 		public QuestionsViewComponent(HttpClient httpClient)
 		{
@@ -52,7 +53,7 @@ namespace Trivical.Core.Components
                             correct = false
                         });
                     }
-
+                    question.answers.Shuffle();
                     viewReturn.questions.Add(question);
                 }
 
@@ -63,6 +64,7 @@ namespace Trivical.Core.Components
 				// Handle error case
 				return View(new Root());
 			}
+
 		}
-	}
+    }
 }
