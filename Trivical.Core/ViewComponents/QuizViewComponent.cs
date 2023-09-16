@@ -1,39 +1,62 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Trivical.Core.Models;
-using Trivical.Core.Services;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 
 namespace Trivical.Core.ViewComponents
 {
     public class QuizViewComponent : ViewComponent
     {
-        private readonly QuizApiService _quizApiService;
+
+        private readonly HttpClient _httpClient;
+        private readonly IMemoryCache _memoryCache;
+
         public IViewComponentResult Invoke()
         {
-            List<Question> questions = _quizApiService.GetQuestionsAsync().Result;
-            
+            List<Question> questions = GetQuizQuestionsAsync().Result;
+
             return View(questions);
         }
 
         [HttpPost]
         public IViewComponentResult SubmitAnswers(List<UserAnswer> userAnswers)
         {
-            List<Question> questions = _quizApiService.GetQuestionsAsync().Result;
-            int score = CalculateScore(questions, userAnswers);
+            List<Question> questions = GetQuizQuestionsAsync().Result;
+            int score = 0;
             // Store the score and userAnswers in a session or database
             return View("_Results", score);
         }
 
-        private int CalculateScore(List<Question> questions, List<UserAnswer> userAnswers)
+
+        public async Task<List<Question>> GetQuizQuestionsAsync()
         {
-            int score = 0;
-            for (int i = 0; i < questions.Count; i++)
+            DateTime currentDate = DateTime.Now.Date;
+            string cacheKey = "QuizResponse";
+
+            //Trys to get cached questions
+            if (_memoryCache.TryGetValue(cacheKey, out List<Question> cachedQuestions))
             {
-                if (userAnswers[i].SelectedAnswer == questions[i].correctAnswer)
-                {
-                    score++;
-                }
+                return cachedQuestions;
             }
-            return score;
+
+            HttpResponseMessage response = await _httpClient.GetAsync("https://the-trivia-api.com/v2/questions?region=GB&types=text_choice&limit=2");
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                List<Question> questions = JsonConvert.DeserializeObject<List<Question>>(json);
+
+                // Calculate the time remaining until midnight
+                DateTime midnight = currentDate.AddDays(1);
+                TimeSpan timeUntilMidnight = midnight - DateTime.Now;
+
+                // Cache the questions with an expiration time set to midnight
+                _memoryCache.Set(cacheKey, questions, timeUntilMidnight);
+
+                return questions;
+            }
+
+            return null;
         }
+
     }
 }
