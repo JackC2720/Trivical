@@ -2,7 +2,7 @@
 @model List<Question>
 
 <h1>Quiz</h1>
-<form method="" action="">
+<form id="quizForm">
     @foreach(var question in Model)
     {
         <h3>@question.question.text</h3>
@@ -15,12 +15,6 @@
 
             <br />
         }
-        <label>
-            <input type="radio" value="@question.correctAnswer">
-            @question.correctAnswer
-        </label>
-        
-        <br />
     }
     <button type="submit">Submit</button>
 </form>

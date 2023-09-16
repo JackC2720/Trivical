@@ -2,6 +2,7 @@
 using Trivical.Core.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
+using J2N.Collections.Generic.Extensions;
 
 namespace Trivical.Core.ViewComponents
 {
@@ -16,23 +17,17 @@ namespace Trivical.Core.ViewComponents
             _httpClient = httpClient;
             _memoryCache = memoryCache;
         }
-
+        //Invoke calls the default partial view
         public IViewComponentResult Invoke()
         {
             List<Question> questions = GetQuizQuestionsAsync().Result;
-
+            foreach (Question question in questions)
+            {
+                question.incorrectAnswers.Add(question.correctAnswer);
+                question.incorrectAnswers = question.incorrectAnswers.OrderBy(a => Guid.NewGuid()).ToList();
+            }
             return View(questions);
         }
-
-        [HttpPost]
-        public IViewComponentResult SubmitAnswers(List<UserAnswer> userAnswers)
-        {
-            List<Question> questions = GetQuizQuestionsAsync().Result;
-            int score = 0; // TODO calc score
-            //TODO store score in session
-            return View("_Results", score);
-        }
-
 
         public async Task<List<Question>> GetQuizQuestionsAsync()
         {
@@ -63,6 +58,5 @@ namespace Trivical.Core.ViewComponents
 
             return null;
         }
-
     }
 }
