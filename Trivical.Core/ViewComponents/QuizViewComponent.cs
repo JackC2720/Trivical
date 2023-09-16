@@ -11,6 +11,12 @@ namespace Trivical.Core.ViewComponents
         private readonly HttpClient _httpClient;
         private readonly IMemoryCache _memoryCache;
 
+        public QuizViewComponent(HttpClient httpClient, IMemoryCache memoryCache)
+        {
+            _httpClient = httpClient;
+            _memoryCache = memoryCache;
+        }
+
         public IViewComponentResult Invoke()
         {
             List<Question> questions = GetQuizQuestionsAsync().Result;
@@ -22,8 +28,8 @@ namespace Trivical.Core.ViewComponents
         public IViewComponentResult SubmitAnswers(List<UserAnswer> userAnswers)
         {
             List<Question> questions = GetQuizQuestionsAsync().Result;
-            int score = 0;
-            // Store the score and userAnswers in a session or database
+            int score = 0; // TODO calc score
+            //TODO store score in session
             return View("_Results", score);
         }
 

@@ -1,9 +1,8 @@
-﻿@using Trivical.Core.Controllers;
-@using Trivical.Core.Models;
+﻿@using Trivical.Core.Models;
 @model List<Question>
 
 <h1>Quiz</h1>
-<form method="post" action="@Url.Action("SubmitAnswers")">
+<form method="" action="">
     @foreach(var question in Model)
     {
         <h3>@question.question.text</h3>
@@ -16,6 +15,12 @@
 
             <br />
         }
+        <label>
+            <input type="radio" value="@question.correctAnswer">
+            @question.correctAnswer
+        </label>
+        
+        <br />
     }
     <button type="submit">Submit</button>
 </form>
