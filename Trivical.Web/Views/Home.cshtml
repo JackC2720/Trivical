@@ -1,8 +1,0 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@using ContentModels = Trivical.Core.Models;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
-
-@{
-	Layout = "Master.cshtml";
-}
-@(await Component.InvokeAsync("Quiz"))
